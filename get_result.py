@@ -3,6 +3,7 @@
 
 from sys import exit
 #from multiprocessing import Queue,Process
+from Levenshtein import distance
 ############计算相似度################
 #def cal1(tag,queue):
 #    sums=0
@@ -71,9 +72,9 @@ def vision():   #能见度
         else:
             return str(int(10*length))
     elif length<30:
-        return str(length+50)
+        return str(int(length+50))
     else:
-        return str((length-30)//5+80)
+        return str(int(length-30)//5+80)
 
 def yun_volume():   #云量
     try:
@@ -137,16 +138,30 @@ def pres_chan():    #气压变化倾向，变化量
 def rain(flag):     #降水量
     if flag=='1':
         volume=input('\n降水量，以毫米为单位:')
-        if volume<1:
+        if float(volume)<1:
             print('结果为:','6'+str(990+int(int(volume)*10))+'1')
         else:
-            for i in range(len(volume)):
+            for i in range(3-len(volume)):
                 volume='0'+volume
             print('结果为:','6'+volume+'1')
     else:
         pass
 
-#def 
+def weather():      #天气现象查询
+    print('\n本脚本只提供查询编码功能')
+    while 1:
+        dic={'露':'01','霜':'02','结冰':'03','大风':'15','积雪':'16','雾凇':'48','雨凇':56,'冰雹':89,'霾':'05','浮尘':'06','扬沙':'07','轻雾':10,'沙尘暴':31,'雾':42,'毛毛雨':50,'雨':60,'雨夹雪':68,'雪':70,'阵雨':80,'阵性雨夹雪':83,'阵雪':85}
+        key=input('\n请输入要查询的天气现象,或输入-1退出:')
+        if key=='-1':break
+        try:
+            print('编码为:',dic[key])
+        except KeyError as e:
+            print('未找到相关关键词:',e,'\n\n你可能是想写:')
+            for i in dic.keys():
+                f=distance(key.encode('unicode_escape'),i.encode('unicode_escape'))
+                if f<5:
+                    print(i,end='  ')
+
 ###########3段##############################
 
 def is3():
@@ -194,7 +209,7 @@ def nddff():    #
     print('结果:',tag1+tag2+tag3)
 
 if __name__=='__main__':
-    6r,7w=iihvv();nddff();
+    r6,w7=iihvv();nddff();
     while 1:
         tag=temp()
         if tag!=-1:
@@ -205,5 +220,5 @@ if __name__=='__main__':
         if tag!=-1:
             print(str(tag))
             break
-    pres_chan();rain(6r);
+    pres_chan();rain(r6);weather()
     print('\n编报结果已全部输出！')
